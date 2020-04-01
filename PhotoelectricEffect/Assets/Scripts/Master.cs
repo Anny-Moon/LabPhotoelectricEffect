@@ -5,7 +5,7 @@ using UnityEngine;
 
 public class Master : MonoBehaviour
 {
-    float WORK_FUNCTION = 3.2f; // Cs 4.2 Zn eV
+    float WORK_FUNCTION = 2.2f; // Cs 4.2 Zn eV
     float PLANK_CONSTANT = 4.135667696e-15f; // eV * s
     float INTENSITY_COEFF = 1f; // have to check this
     float POTENTIAL_BARRIER = 0.9f; // eV
@@ -16,6 +16,8 @@ public class Master : MonoBehaviour
 
     public float current;
     public float voltage;
+
+    Charge charge;
 
     float E_max; // max energy of electrons
     List<float> electrons; // energies of electrons
@@ -65,7 +67,7 @@ public class Master : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        
+        charge = new Charge();
         voltage = 0f;
     }
 
@@ -97,7 +99,10 @@ public class Master : MonoBehaviour
 
     public void onSaveButtonClick()
     {
-        print("save clicked");
+        charge.setE_max(E_max);
+        charge.setIntensity(intensity);
+        charge.setEnergies();
+        charge.setNumElectrons();
     }
 
     public void onVoltageInputChange(float volts_in)
