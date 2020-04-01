@@ -6,13 +6,6 @@ using UnityEngine;
 public class Filter : DropdownSettings 
 {
     
-    public enum filter
-    {
-        red,
-        yellow,
-        blue
-    };
-
 
     public float value;
     //public DropdownSettings dropdown;
@@ -20,11 +13,12 @@ public class Filter : DropdownSettings
     protected List<float> values;
     protected List<string> valuesToPrint;
 
+
     public void Awake()
     {
-        float[] values_str = { 415.0f,
-                               555.0f,
-                               612.0f
+        float[] values_str = { 8.21e14f,
+                               6.87e14f,
+                               5.20e14f
                                 };
         values = new List<float>(values_str);
 
