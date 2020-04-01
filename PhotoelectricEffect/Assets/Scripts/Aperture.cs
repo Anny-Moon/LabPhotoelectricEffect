@@ -3,10 +3,8 @@ using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 
-public class Filter : DropdownSettings 
+public class Aperture : DropdownSettings
 {
-    
-
     public float value;
     //public DropdownSettings dropdown;
 
@@ -16,32 +14,30 @@ public class Filter : DropdownSettings
 
     public void Awake()
     {
-        float[] values_str = { 8.21e14f,
-                               6.87e14f,
-                               5.20e14f
+        float[] values_str = { 40f,
+                               160f,
+                               560f
                                 };
         values = new List<float>(values_str);
 
-        string[] valuesToP_str = { "blue",
-                                   "green",
-                                   "red"
+        string[] valuesToP_str = { "2 mm",
+                                   "4 mm",
+                                   "8 mm"
                                 };
         valuesToPrint = new List<string>(valuesToP_str);
 
         fillIn(valuesToPrint);
         //print("filled units");
 
-        value = 415.0f;
+        value = 40f;
 
     }
 
     public override void DropdownValueChanged(TMP_Dropdown change)
     {
         int i = change.value;
-        owner.onFilterChange(values[i]);
+        owner.onApertureChange(values[i]);
         //print("New Value : " + change.value);
 
     }
-   
 }
-

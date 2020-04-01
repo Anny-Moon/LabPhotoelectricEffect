@@ -6,6 +6,7 @@ using UnityEngine.UI;
 
 public class VoltageInput : MonoBehaviour
 {
+    public Master owner;
     float UPPER_LIMIT = 30f; // V
     float LOWER_LIMIT = -4.5f; //V
     float voltage;
@@ -40,6 +41,7 @@ public class VoltageInput : MonoBehaviour
         voltage = Validator(arg);
         print("volt " + voltage);
         input.text = voltage.ToString();
+        owner.onVoltageInputChange(voltage);
 
     }
     // Update is called once per frame

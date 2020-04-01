@@ -5,7 +5,7 @@ using UnityEngine;
 
 public class Master : MonoBehaviour
 {
-    float WORK_FUNCTION = 2.1f; // Cs 4.2 Zn eV
+    float WORK_FUNCTION = 3.2f; // Cs 4.2 Zn eV
     float PLANK_CONSTANT = 4.135667696e-15f; // eV * s
     float INTENSITY_COEFF = 1f; // have to check this
     float POTENTIAL_BARRIER = 0.9f; // eV
@@ -75,10 +75,20 @@ public class Master : MonoBehaviour
         
     }
 
-    public void onFilterChange(float option)
+    public void onFilterChange(float arg)
     {
         //print(option);
-        frequency = option;
+        frequency = arg;
+        setNewElectronsEnergies();
+        setNewCurrent();
+        print("current " + current);
+
+    }
+
+    public void onApertureChange(float arg)
+    {
+        //print(option);
+        intensity = (int)arg;
         setNewElectronsEnergies();
         setNewCurrent();
         print("current " + current);
@@ -93,5 +103,8 @@ public class Master : MonoBehaviour
     public void onVoltageInputChange(float volts_in)
     {
         voltage = volts_in;
+        setNewElectronsEnergies();
+        setNewCurrent();
+        print("current " + current);
     }
 }
