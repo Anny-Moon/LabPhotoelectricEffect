@@ -89,4 +89,9 @@ public class Master : MonoBehaviour
     {
         print("save clicked");
     }
+
+    public void onVoltageInputChange(float volts_in)
+    {
+        voltage = volts_in;
+    }
 }
