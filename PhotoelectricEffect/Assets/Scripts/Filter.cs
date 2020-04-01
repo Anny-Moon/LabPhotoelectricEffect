@@ -7,9 +7,6 @@ public class Filter : DropdownSettings
 {
     
 
-    public float value;
-    //public DropdownSettings dropdown;
-
     protected List<float> values;
     protected List<string> valuesToPrint;
 
@@ -30,8 +27,6 @@ public class Filter : DropdownSettings
 
         fillIn(valuesToPrint);
         //print("filled units");
-
-        value = 415.0f;
 
     }
 

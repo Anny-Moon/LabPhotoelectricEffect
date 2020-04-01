@@ -1,20 +1,25 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using TMPro;
+
 
 
 public class Master : MonoBehaviour
 {
-    float WORK_FUNCTION = 2.2f; // Cs 4.2 Zn eV
+    float WORK_FUNCTION = 1.2f; // Cs 4.2 Zn eV
     float PLANK_CONSTANT = 4.135667696e-15f; // eV * s
     float INTENSITY_COEFF = 1f; // have to check this
     float POTENTIAL_BARRIER = 0.9f; // eV
 
 
-    float frequency;
-    int intensity = 100;
+    float frequency = 8.21e14f;
+    int intensity = 40;
 
-    public float current;
+    public GameObject currentTextObject;
+    private TextMeshProUGUI currentText;
+
+    public double current;
     public float voltage;
 
     Charge charge;
@@ -22,6 +27,13 @@ public class Master : MonoBehaviour
     float E_max; // max energy of electrons
     List<float> electrons; // energies of electrons
 
+    void setE_max()
+    {   //calculate new E_max
+        //h * nu = W + Emax - eV
+        E_max = PLANK_CONSTANT * frequency - WORK_FUNCTION;
+    }
+
+   
     void setNewElectronsEnergies()
     {
         //calculate new E_max
@@ -37,7 +49,7 @@ public class Master : MonoBehaviour
             {
                 electrons.Add(0f);
                 //print(electrons[i]);
-            };
+            }
             
         }
         
@@ -52,6 +64,8 @@ public class Master : MonoBehaviour
         }
     }
 
+   
+
     void setNewCurrent()
     {
         current = 0;
@@ -64,10 +78,17 @@ public class Master : MonoBehaviour
         current *= INTENSITY_COEFF;
     }
 
+    private void Awake()
+    {
+        currentText = currentTextObject.gameObject.GetComponent<TextMeshProUGUI>();
+        charge = new Charge();
+        charge.setIntensity(intensity);
+
+    }
     // Start is called before the first frame update
     void Start()
     {
-        charge = new Charge();
+        
         voltage = 0f;
     }
 
@@ -81,35 +102,38 @@ public class Master : MonoBehaviour
     {
         //print(option);
         frequency = arg;
-        setNewElectronsEnergies();
-        setNewCurrent();
-        print("current " + current);
-
+        //setE_max();
+        onAnyChange();
     }
 
     public void onApertureChange(float arg)
     {
         //print(option);
         intensity = (int)arg;
-        setNewElectronsEnergies();
-        setNewCurrent();
-        print("current " + current);
+        charge.setIntensity(intensity);
+        onAnyChange();
 
+    }
+
+    void onAnyChange()
+    {
+        setE_max();
+        charge.setE_max(E_max);
+        charge.setEnergies();
+        charge.setNumElectrons();
+        current = charge.calculateCurrent(voltage);
+        currentText.text = current.ToString();
+        print("current " + current);
     }
 
     public void onSaveButtonClick()
     {
-        charge.setE_max(E_max);
-        charge.setIntensity(intensity);
-        charge.setEnergies();
-        charge.setNumElectrons();
+        onAnyChange();
     }
 
     public void onVoltageInputChange(float volts_in)
     {
         voltage = volts_in;
-        setNewElectronsEnergies();
-        setNewCurrent();
-        print("current " + current);
+        onAnyChange();
     }
 }

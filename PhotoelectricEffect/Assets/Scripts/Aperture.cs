@@ -5,8 +5,6 @@ using UnityEngine;
 
 public class Aperture : DropdownSettings
 {
-    public float value;
-    //public DropdownSettings dropdown;
 
     protected List<float> values;
     protected List<string> valuesToPrint;
@@ -29,7 +27,6 @@ public class Aperture : DropdownSettings
         fillIn(valuesToPrint);
         //print("filled units");
 
-        value = 40f;
 
     }
 
