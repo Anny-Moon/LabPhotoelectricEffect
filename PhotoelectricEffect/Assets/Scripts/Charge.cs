@@ -5,59 +5,69 @@ using System;
 
 public class Charge : MonoBehaviour
 {
+
+    float PLANK_CONSTANT = 4.135667696e-15f; // eV * s
+    float MAX_FREQUENCY = 8.21e14f; // blue filter
+
+
     int NUM_OF_BINS = 100;
     int MAX_NUM_OF_ELECTRONS_PER_BIN = 100;
-    Int64 TOTAL_NUM_OF_ELECTRONS = 100000000;
-    float POTENTIAL_BARRIER = 0.9f; // eV
+    
+    double TOTAL_NUM_OF_ELECTRONS = 1e8;
+    float POTENTIAL_BARRIER = 0.2f; // eV
     double ELEMENTARY_CHARGE = 1.60217662e-19;
+    float WORK_FUNCTION = 2.2f; // Cs 4.2 Zn eV
+
+    
 
     public List<float> energies;
-    public List<int> numElectrons;
+    public List<double> numElectrons;
 
-    float E_max;
+    float frequency;
     int intensity;
-
-    public void setE_max(float arg)
-    {
-        E_max = arg;
-        print("E " + E_max);
-    }
 
     public void setIntensity(int arg)
     {
         intensity = arg;
     }
 
-    public void setEnergies()
+    public void setFrequency(float arg)
     {
-        if (E_max < 0)
-            return;
-
-        energies = new List<float>();
-        for (int i=0; i < NUM_OF_BINS; i++)
-            energies.Add(E_max / NUM_OF_BINS * i);
+        frequency = arg;
     }
 
-    public void setNumElectrons()
+    public void Start()
     {
-        if (E_max<0)
-            return;
+        float E_max_max = PLANK_CONSTANT * MAX_FREQUENCY - WORK_FUNCTION;
+        float E_max_capacitor = -WORK_FUNCTION;
+        //float E_min_capacitor = -WORK_FUNCTION - E_max_max;
+        float E_min_capacitor = - PLANK_CONSTANT * MAX_FREQUENCY - 4f;
+        float dE = (E_max_capacitor - E_min_capacitor) / (NUM_OF_BINS-1);
+        energies = new List<float>();
+        for (int i=0; i < NUM_OF_BINS; i++)
+            energies.Add(E_min_capacitor + i*dE);
 
-        Int64 totalNumber = 0;
-        numElectrons = new List<int>();
+        calculateDensityOfStates();
+    }
+
+    void calculateDensityOfStates()
+    {
+        
+        double totalNumber = 0;
+        numElectrons = new List<double>();
+
         for (int i=0; i < NUM_OF_BINS ; i++)
         {
             numElectrons.Add(UnityEngine.Random.Range(0, MAX_NUM_OF_ELECTRONS_PER_BIN));
             totalNumber += numElectrons[i];
         }
 
-        Int64 a = intensity * TOTAL_NUM_OF_ELECTRONS;
-        double coeff = a / totalNumber;
+        double coeff = TOTAL_NUM_OF_ELECTRONS / totalNumber;
         
         totalNumber = 0;
         for (int i = 0; i < NUM_OF_BINS; i++)
         {
-            numElectrons[i] = (int)(coeff * numElectrons[i]);
+            numElectrons[i] = coeff * numElectrons[i];
             totalNumber += numElectrons[i];
         }
 
@@ -66,28 +76,19 @@ public class Charge : MonoBehaviour
 
     public double calculateCurrent(float voltage)
     {
-        if (E_max < 0)
-            return 0;
-        print("emax " + E_max);
+        
         double current = 0;
         for (int i = 0; i < NUM_OF_BINS; i++)
         {
             //print(energies[i]);
-            if(energies[i]+voltage-POTENTIAL_BARRIER > 0)
-            {
-    
+            if(PLANK_CONSTANT*frequency + energies[i] + voltage > 0)
                 current += numElectrons[i];
-            }
+            
         }
-        return current*ELEMENTARY_CHARGE;
+        return current*ELEMENTARY_CHARGE * intensity/56.0;
     }
 
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
-
+    
     // Update is called once per frame
     void Update()
     {

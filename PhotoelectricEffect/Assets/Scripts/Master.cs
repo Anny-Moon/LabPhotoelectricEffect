@@ -2,19 +2,18 @@
 using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
-
-
+using System.IO;
 
 public class Master : MonoBehaviour
 {
-    float WORK_FUNCTION = 1.2f; // Cs 4.2 Zn eV
+    float WORK_FUNCTION = 2.2f; // Cs 4.2 Zn eV
     float PLANK_CONSTANT = 4.135667696e-15f; // eV * s
     float INTENSITY_COEFF = 1f; // have to check this
     float POTENTIAL_BARRIER = 0.9f; // eV
 
 
     float frequency = 8.21e14f;
-    int intensity = 40;
+    int intensity = 4;
 
     public GameObject currentTextObject;
     private TextMeshProUGUI currentText;
@@ -22,7 +21,7 @@ public class Master : MonoBehaviour
     public double current;
     public float voltage;
 
-    Charge charge;
+    public Charge charge;
 
     float E_max; // max energy of electrons
     List<float> electrons; // energies of electrons
@@ -81,7 +80,7 @@ public class Master : MonoBehaviour
     private void Awake()
     {
         currentText = currentTextObject.gameObject.GetComponent<TextMeshProUGUI>();
-        charge = new Charge();
+        //charge = new Charge();
         charge.setIntensity(intensity);
 
     }
@@ -90,6 +89,9 @@ public class Master : MonoBehaviour
     {
         
         voltage = 0f;
+
+       // InvokeRepeating("onAnyChange", 1.0f, 0.5f);
+
     }
 
     // Update is called once per frame
@@ -102,7 +104,7 @@ public class Master : MonoBehaviour
     {
         //print(option);
         frequency = arg;
-        //setE_max();
+        charge.setFrequency(frequency);
         onAnyChange();
     }
 
@@ -116,19 +118,25 @@ public class Master : MonoBehaviour
     }
 
     void onAnyChange()
-    {
-        setE_max();
-        charge.setE_max(E_max);
-        charge.setEnergies();
-        charge.setNumElectrons();
+    { 
         current = charge.calculateCurrent(voltage);
-        currentText.text = current.ToString();
+        currentText.text = current.ToString("0.000000E0");
         print("current " + current);
     }
 
     public void onSaveButtonClick()
     {
-        onAnyChange();
+        //System.IO.FileStream oFileStream = null;
+        //oFileStream = new System.IO.FileStream("./curentVSvoltage.csv", System.IO.FileMode.Create);
+        StreamWriter writer = new StreamWriter("currentVSvoltage.csv", false);
+
+        for (float V = -4.5f; V < 30; V += 0.1f)
+        {
+            double currenttt = charge.calculateCurrent(V);
+            writer.Write(V+" "+currenttt + "\n");
+        }
+        writer.Close();
+        //onAnyChange();
     }
 
     public void onVoltageInputChange(float volts_in)

@@ -12,9 +12,9 @@ public class Aperture : DropdownSettings
 
     public void Awake()
     {
-        float[] values_str = { 40f,
-                               160f,
-                               560f
+        float[] values_str = { 4f,
+                               16f,
+                               56f
                                 };
         values = new List<float>(values_str);
 
