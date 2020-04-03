@@ -14,11 +14,12 @@ public class Charge : MonoBehaviour
     int MAX_NUM_OF_ELECTRONS_PER_BIN = 100;
     
     double TOTAL_NUM_OF_ELECTRONS = 1e8;
-    float POTENTIAL_BARRIER = 0.2f; // eV
+    float POTENTIAL_BARRIER = 5.0f; // eV
     double ELEMENTARY_CHARGE = 1.60217662e-19;
     float WORK_FUNCTION = 2.2f; // Cs 4.2 Zn eV
 
-    
+    float E_max_capacitor;
+    float E_min_capacitor;
 
     public List<float> energies;
     public List<double> numElectrons;
@@ -39,15 +40,15 @@ public class Charge : MonoBehaviour
     public void Start()
     {
         float E_max_max = PLANK_CONSTANT * MAX_FREQUENCY - WORK_FUNCTION;
-        float E_max_capacitor = -WORK_FUNCTION;
+        E_max_capacitor = -WORK_FUNCTION;
         //float E_min_capacitor = -WORK_FUNCTION - E_max_max;
-        float E_min_capacitor = - PLANK_CONSTANT * MAX_FREQUENCY - 4f;
+        E_min_capacitor = - PLANK_CONSTANT * MAX_FREQUENCY - 20f;
         float dE = (E_max_capacitor - E_min_capacitor) / (NUM_OF_BINS-1);
         energies = new List<float>();
         for (int i=0; i < NUM_OF_BINS; i++)
             energies.Add(E_min_capacitor + i*dE);
 
-        calculateDensityOfStates();
+        calculateDensityOfStatesNew();
     }
 
     void calculateDensityOfStates()
@@ -74,14 +75,86 @@ public class Charge : MonoBehaviour
        
     }
 
+    double Gauss(double mu, double sigma)
+    {
+        return Math.Exp(-mu * mu / (sigma*sigma));
+    }
+
+    void calculateDensityOfStatesNew()
+    {
+
+        double totalNumber = 0;
+        numElectrons = new List<double>();
+
+        for (int i = 0; i < NUM_OF_BINS; i++)
+        {
+            numElectrons.Add(UnityEngine.Random.Range(0, MAX_NUM_OF_ELECTRONS_PER_BIN)*Gauss(i-NUM_OF_BINS, NUM_OF_BINS/4.0));
+            totalNumber += numElectrons[i];
+        }
+
+        double coeff = TOTAL_NUM_OF_ELECTRONS / totalNumber;
+
+        totalNumber = 0;
+        for (int i = 0; i < NUM_OF_BINS; i++)
+        {
+            numElectrons[i] = coeff * numElectrons[i];
+            totalNumber += numElectrons[i];
+        }
+
+
+    }
+    /*
+    double Box_Muller(double mean, double stdDev)
+    {
+        System.Random rand = new System.Random(); //reuse this if you are generating many
+        double u1 = 1.0 - rand.NextDouble(); //uniform(0,1] random doubles
+        double u2 = 1.0 - rand.NextDouble();
+        double randStdNormal = Math.Sqrt(-2.0 * Math.Log(u1)) *
+                     Math.Sin(2.0 * Math.PI * u2); //random normal(0,1)
+        double randNormal =
+                     mean + stdDev * randStdNormal; //random normal(mean,stdDev^2)
+        return randNormal;
+    }
+
+    void calculateDensityOfStatesGauss()
+    {
+        double totalNumber = 0;
+        numElectrons = new List<double>();
+
+        for (int i = 0; i <1000; i++)
+        {
+            double mu = E_min_capacitor - E_max_capacitor;
+            double sigma = - mu / 2.0 * 2;
+            .Add(Box_Muller(mu,sigma ));
+            totalNumber += numElectrons[i];
+        }
+
+        double coeff = TOTAL_NUM_OF_ELECTRONS / totalNumber;
+
+        totalNumber = 0;
+        for (int i = 0; i < NUM_OF_BINS; i++)
+        {
+            numElectrons[i] = coeff * numElectrons[i];
+            totalNumber += numElectrons[i];
+        }
+
+
+    }
+    */
     public double calculateCurrent(float voltage)
     {
         
+        
+        double photonEnergy = PLANK_CONSTANT * frequency;
         double current = 0;
+       
+        
         for (int i = 0; i < NUM_OF_BINS; i++)
         {
+            //if (photonEnergy + energies[i] < 0)
+              //  continue;
             //print(energies[i]);
-            if(PLANK_CONSTANT*frequency + energies[i] + voltage > 0)
+            if(photonEnergy + energies[i] + voltage > 0)
                 current += numElectrons[i];
             
         }
