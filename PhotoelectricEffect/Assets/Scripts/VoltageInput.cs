@@ -11,6 +11,7 @@ public class VoltageInput : MonoBehaviour
     float LOWER_LIMIT = -4.5f; //V
     float voltage;
     TMP_InputField input;
+     
 
     // Start is called before the first frame update
     void Start()
@@ -36,12 +37,21 @@ public class VoltageInput : MonoBehaviour
     }
     
 
-    void onInputChange(string arg)
+    public void onInputChange(string arg)
     {
         voltage = Validator(arg);
         print("volt " + voltage);
         input.text = voltage.ToString();
         owner.onVoltageInputChange(voltage);
+
+    }
+
+    public void onInputChangeFloat(float arg)
+    {
+        //voltage = Validator(arg);
+        //print("volt " + voltage);
+        input.text = arg.ToString();
+        owner.onVoltageInputChange(arg);
 
     }
     // Update is called once per frame

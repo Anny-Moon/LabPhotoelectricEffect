@@ -16,6 +16,9 @@ public class Master : MonoBehaviour
     public GameObject currentTextObject;
     private TextMeshProUGUI currentText;
 
+    public GameObject voltageTextObject;
+    private TextMeshProUGUI voltageText;
+
     public double current;
     public float voltage;
 
@@ -28,6 +31,7 @@ public class Master : MonoBehaviour
     private void Awake()
     {
         currentText = currentTextObject.gameObject.GetComponent<TextMeshProUGUI>();
+        voltageText = voltageTextObject.gameObject.GetComponent<TextMeshProUGUI>();
         //charge = new ChargeNew();
         charge.setIntensity(intensity);
 
@@ -37,6 +41,7 @@ public class Master : MonoBehaviour
     {
         
         voltage = 0f;
+        onVoltageInputChange(voltage);
 
        // InvokeRepeating("onAnyChange", 1.0f, 0.5f);
 
@@ -68,6 +73,7 @@ public class Master : MonoBehaviour
 
     }
 
+
     void onAnyChange()
     { 
         current = charge.calculateCurrent(voltage);
@@ -93,6 +99,7 @@ public class Master : MonoBehaviour
     public void onVoltageInputChange(float volts_in)
     {
         voltage = volts_in;
+        voltageText.text = voltage.ToString();
         onAnyChange();
     }
 }

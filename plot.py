@@ -23,17 +23,20 @@ def plot(color, aperture):
             size = 1;
 
         if(aperture == "4cm"):
-            size = 2;
+            size = 3;
+            
+        if(aperture == "8cm"):
+            size = 5;
         plt.scatter(X, Y, c=color, s = size)
     except:
         print("no " + color);
 
-
-plt.figure();
+fig = plt.figure()
 plot("blue", "2cm")
 plot("blue", "4cm")
 plot("blue", "8cm")
-plot("green","2cm")
-#plot("red")
+#plot("green","2cm")
+#plot("red", "2cm")
 
 plt.show();
+fig.savefig("currentVSvoltage.png");
