@@ -8,8 +8,10 @@ public class Master : MonoBehaviour
 {
     
 
-    float frequency = 8.21e14f;
-    int intensity = 4;
+    float frequency;
+    string filter;
+    int intensity;
+    string aperture;
 
     public GameObject currentTextObject;
     private TextMeshProUGUI currentText;
@@ -17,7 +19,7 @@ public class Master : MonoBehaviour
     public double current;
     public float voltage;
 
-    public Charge charge;
+    public ChargeNew charge;
 
     float E_max; // max energy of electrons
     List<float> electrons; // energies of electrons
@@ -26,7 +28,7 @@ public class Master : MonoBehaviour
     private void Awake()
     {
         currentText = currentTextObject.gameObject.GetComponent<TextMeshProUGUI>();
-        //charge = new Charge();
+        //charge = new ChargeNew();
         charge.setIntensity(intensity);
 
     }
@@ -46,18 +48,21 @@ public class Master : MonoBehaviour
         
     }
 
-    public void onFilterChange(float arg)
+    public void onFilterChange(float arg, string name)
     {
-        //print(option);
+        //print(arg);
         frequency = arg;
+        filter = name;
+        print(filter);
         charge.setFrequency(frequency);
         onAnyChange();
     }
 
-    public void onApertureChange(float arg)
+    public void onApertureChange(float arg, string name)
     {
         //print(option);
         intensity = (int)arg;
+        aperture = name;
         charge.setIntensity(intensity);
         onAnyChange();
 
@@ -74,7 +79,7 @@ public class Master : MonoBehaviour
     {
         //System.IO.FileStream oFileStream = null;
         //oFileStream = new System.IO.FileStream("./curentVSvoltage.csv", System.IO.FileMode.Create);
-        StreamWriter writer = new StreamWriter("currentVSvoltage.dat", false);
+        StreamWriter writer = new StreamWriter("currentVSvoltage_" + filter + ".dat", false);
 
         for (float V = -4.5f; V < 30; V += 0.1f)
         {

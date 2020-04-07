@@ -1,16 +1,32 @@
 import matplotlib.pyplot as plt
 
 
-X = [];
-Y = [];
 
-with open ("PhotoelectricEffect/currentVSvoltage.dat", "r") as fp:
-    for line in fp:
-        x, y = line.split();
-        print(x,y)
-        X.append(float(x));
-        Y.append(float(y)*1e12);
+def readFile(fileName, X, Y):
+    with open (fileName, "r") as fp:
+        for line in fp:
+            x, y = line.split();
+            print(x,y)
+            X.append(float(x));
+            Y.append(float(y)*1e12);
+
+
+def plot(color):
+    try:
+        X = [];
+        Y = [];
+        fileName = "PhotoelectricEffect/currentVSvoltage_" + color + ".dat"
+        print(fileName)
+        
+        readFile(fileName, X, Y);
+        plt.scatter(X, Y, c=color)
+    except:
+        print("no " + color);
+
 
 plt.figure();
-plt.scatter(X, Y)
+plot("blue")
+plot("green")
+plot("red")
+
 plt.show();

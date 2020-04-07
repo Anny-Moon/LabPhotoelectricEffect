@@ -23,17 +23,21 @@ public class Aperture : DropdownSettings
                                    "8 mm"
                                 };
         valuesToPrint = new List<string>(valuesToP_str);
-
         fillIn(valuesToPrint);
-        //print("filled units");
+        
 
+    }
 
+    protected override void Start()
+    {
+        base.Start();
+        owner.onApertureChange(values[0], valuesToPrint[0]);
     }
 
     public override void DropdownValueChanged(TMP_Dropdown change)
     {
         int i = change.value;
-        owner.onApertureChange(values[i]);
+        owner.onApertureChange(values[i], valuesToPrint[i]);
         //print("New Value : " + change.value);
 
     }

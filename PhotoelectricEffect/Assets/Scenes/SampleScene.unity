@@ -1570,11 +1570,9 @@ MonoBehaviour:
   m_GameObject: {fileID: 958747464}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9700010a1aa414843b6a233d45849dc4, type: 3}
+  m_Script: {fileID: 11500000, guid: 8548aba328c874913a615a0426f4aa5e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  energies: []
-  numElectrons: []
 --- !u!4 &958747466
 Transform:
   m_ObjectHideFlags: 0

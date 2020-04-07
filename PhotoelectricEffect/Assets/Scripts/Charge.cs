@@ -48,7 +48,7 @@ public class Charge : MonoBehaviour
         for (int i=0; i < NUM_OF_BINS; i++)
             energies.Add(E_min_capacitor + i*dE);
 
-        calculateDensityOfStatesNew();
+        calculateDensityOfStates();
     }
 
     void calculateDensityOfStates()
@@ -146,13 +146,14 @@ public class Charge : MonoBehaviour
         
         
         double photonEnergy = PLANK_CONSTANT * frequency;
+        print("photon " + photonEnergy);
         double current = 0;
        
         
         for (int i = 0; i < NUM_OF_BINS; i++)
         {
-            //if (photonEnergy + energies[i] < 0)
-              //  continue;
+            if (photonEnergy + energies[i] < 0)
+                continue;
             //print(energies[i]);
             if(photonEnergy + energies[i] + voltage > 0)
                 current += numElectrons[i];

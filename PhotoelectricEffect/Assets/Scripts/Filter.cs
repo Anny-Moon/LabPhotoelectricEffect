@@ -24,16 +24,23 @@ public class Filter : DropdownSettings
                                    "red"
                                 };
         valuesToPrint = new List<string>(valuesToP_str);
-
         fillIn(valuesToPrint);
-        //print("filled units");
+        
 
     }
+
+    
+    protected override void Start()
+    {
+        base.Start();
+        owner.onFilterChange(values[0], valuesToPrint[0]);
+    }
+    
 
     public override void DropdownValueChanged(TMP_Dropdown change)
     {
         int i = change.value;
-        owner.onFilterChange(values[i]);
+        owner.onFilterChange(values[i], valuesToPrint[i]);
         //print("New Value : " + change.value);
 
     }
