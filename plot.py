@@ -6,7 +6,7 @@ def readFile(fileName, X, Y):
     with open (fileName, "r") as fp:
         for line in fp:
             x, y = line.split();
-            print(x,y)
+            #print(x,y)
             X.append(float(x));
             Y.append(float(y)*1e12);
 
@@ -16,10 +16,9 @@ def plot(color):
         X = [];
         Y = [];
         fileName = "PhotoelectricEffect/currentVSvoltage_" + color + ".dat"
-        print(fileName)
-        
+        print("read from: " + fileName);
         readFile(fileName, X, Y);
-        plt.scatter(X, Y, c=color)
+        plt.scatter(X, Y, c=color, s = 1)
     except:
         print("no " + color);
 

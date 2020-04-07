@@ -34,15 +34,44 @@ public class ChargeNew : MonoBehaviour
         frequency = arg;
     }
 
+    double Gauss(double x, double mu, double sigma)
+    {
+        return System.Math.Exp(-(x-mu)*(x-mu) / (sigma * sigma));
+    }
+
+    double shape(double x, double mu, double sigma)
+    {
+        //current = 2 * (voltage+E_max) * intensity/5.0;
+        double cutoff = mu / 2.0;
+        double current = 0;
+        if (x < mu - cutoff)
+            current = Gauss(x + cutoff, mu, sigma) - Gauss(cutoff, mu, sigma);
+
+        else
+            current = Gauss(mu, mu, sigma) - Gauss(cutoff, mu, sigma);
+
+
+
+        return current;
+    }
+
     public double calculateCurrent(float voltage)
     {
         double E_max = frequency * PLANK_CONSTANT - WORK_FUNCTION;
-
+        print("E_max = " + E_max);
         if(E_max<0)
             return 0;
 
+        double mu = 30;
+        double sigma = mu / 2.0;
         double current = 0;
-        current = 2 * (voltage+E_max) * intensity/5.0;
+        //current = 2 * (voltage+E_max) * intensity/5.0;
+
+        
+        current = shape((voltage + E_max), mu, sigma);
+
+        if (current < 0)
+            return 0;
         return current;
     }
     // Start is called before the first frame update
