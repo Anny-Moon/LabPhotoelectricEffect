@@ -63,7 +63,7 @@ public class ChargeNew : MonoBehaviour
             return 0;
 
         double mu = 30;
-        double sigma = mu / 2.0;
+        double sigma = 20;
         double current = 0;
         //current = 2 * (voltage+E_max) * intensity/5.0;
 
@@ -72,7 +72,7 @@ public class ChargeNew : MonoBehaviour
 
         if (current < 0)
             return 0;
-        return current;
+        return intensity*current * 1e-10;
     }
     // Start is called before the first frame update
     void Start()

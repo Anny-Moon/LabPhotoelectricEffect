@@ -8,24 +8,32 @@ def readFile(fileName, X, Y):
             x, y = line.split();
             #print(x,y)
             X.append(float(x));
-            Y.append(float(y)*1e12);
+            Y.append(float(y)*1e10);
 
 
-def plot(color):
+def plot(color, aperture):
     try:
         X = [];
         Y = [];
-        fileName = "PhotoelectricEffect/currentVSvoltage_" + color + ".dat"
+        fileName = "PhotoelectricEffect/currentVSvoltage_" + color +"_" + aperture+ ".dat"
         print("read from: " + fileName);
         readFile(fileName, X, Y);
-        plt.scatter(X, Y, c=color, s = 1)
+        size =1;
+        if(aperture == "2cm"):
+            size = 1;
+
+        if(aperture == "4cm"):
+            size = 2;
+        plt.scatter(X, Y, c=color, s = size)
     except:
         print("no " + color);
 
 
 plt.figure();
-plot("blue")
-plot("green")
-plot("red")
+plot("blue", "2cm")
+plot("blue", "4cm")
+plot("blue", "8cm")
+plot("green","2cm")
+#plot("red")
 
 plt.show();
