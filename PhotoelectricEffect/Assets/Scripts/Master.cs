@@ -85,7 +85,7 @@ public class Master : MonoBehaviour
     {
         //System.IO.FileStream oFileStream = null;
         //oFileStream = new System.IO.FileStream("./curentVSvoltage.csv", System.IO.FileMode.Create);
-        StreamWriter writer = new StreamWriter("currentVSvoltage_" + filter + "_"+ aperture + ".dat", false);
+        StreamWriter writer = new StreamWriter("currentVSvoltage_" + filter.Remove(filter.Length - 3) + "_"+ aperture.Remove(aperture.Length - 3) + ".dat", false);
 
         for (float V = -4.5f; V < 30; V += 0.1f)
         {

@@ -18,25 +18,17 @@ def plot(color, aperture):
         fileName = "PhotoelectricEffect/currentVSvoltage_" + color +"_" + aperture+ ".dat"
         print("read from: " + fileName);
         readFile(fileName, X, Y);
-        size =1;
-        if(aperture == "2cm"):
-            size = 1;
-
-        if(aperture == "4cm"):
-            size = 3;
-            
-        if(aperture == "8cm"):
-            size = 5;
-        plt.scatter(X, Y, c=color, s = size)
+        
+        plt.scatter(X, Y, c="red", s = 2)
     except:
-        print("no " + color);
+        print("no " + color + "nm, " + aperture + " cm." );
 
 fig = plt.figure()
-plot("blue", "2cm")
-plot("blue", "4cm")
-plot("blue", "8cm")
-#plot("green","2cm")
-#plot("red", "2cm")
+plot("365", "2")
+plot("365", "4")
+plot("365", "8")
+#plot("436","2")
+#plot("577", "2")
 
 plt.show();
 fig.savefig("currentVSvoltage.png");

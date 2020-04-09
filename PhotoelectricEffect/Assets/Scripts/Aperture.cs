@@ -18,9 +18,9 @@ public class Aperture : DropdownSettings
                                 };
         values = new List<float>(values_str);
 
-        string[] valuesToP_str = { "2cm",
-                                   "4cm",
-                                   "8cm"
+        string[] valuesToP_str = { "2 cm",
+                                   "4 cm",
+                                   "8 cm"
                                 };
         valuesToPrint = new List<string>(valuesToP_str);
         fillIn(valuesToPrint);
