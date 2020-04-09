@@ -43,7 +43,7 @@ public class Master : MonoBehaviour
         voltage = 0f;
         onVoltageInputChange(voltage);
 
-       // InvokeRepeating("onAnyChange", 1.0f, 0.5f);
+        InvokeRepeating("displayCurrent", 1.0f, 0.5f);
 
     }
 
@@ -73,12 +73,23 @@ public class Master : MonoBehaviour
 
     }
 
+    double addNoise(double arg)
+    {
+        return (arg + 1e-14*UnityEngine.Random.Range(-1f, 1f));
+    }
+
+    void displayCurrent()
+    {
+        double tmp = addNoise(current);
+        currentText.text = tmp.ToString("0.00000E0");
+        print("current " + current);
+    }
 
     void onAnyChange()
     { 
         current = charge.calculateCurrent(voltage);
-        currentText.text = current.ToString("0.000000E0");
-        print("current " + current);
+        displayCurrent();
+        
     }
 
     public void onSaveButtonClick()
@@ -89,8 +100,9 @@ public class Master : MonoBehaviour
 
         for (float V = -4.5f; V < 30; V += 0.1f)
         {
-            double currenttt = charge.calculateCurrent(V);
-            writer.Write(V+" "+currenttt + "\n");
+            double tmp = charge.calculateCurrent(V);
+            tmp = addNoise(tmp);
+            writer.Write(V+" "+tmp + "\n");
         }
         writer.Close();
         //onAnyChange();
