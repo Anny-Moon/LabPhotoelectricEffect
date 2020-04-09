@@ -19,9 +19,9 @@ public class Filter : DropdownSettings
                                 };
         values = new List<float>(values_str);
 
-        string[] valuesToP_str = { "blue",
-                                   "green",
-                                   "red"
+        string[] valuesToP_str = { "Blue",
+                                   "Green",
+                                   "Red"
                                 };
         valuesToPrint = new List<string>(valuesToP_str);
         fillIn(valuesToPrint);
