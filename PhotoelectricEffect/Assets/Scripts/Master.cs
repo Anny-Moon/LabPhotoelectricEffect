@@ -22,7 +22,7 @@ public class Master : MonoBehaviour
     public double current;
     public float voltage;
 
-    public ChargeNew charge;
+    public Charge charge;
 
     float E_max; // max energy of electrons
     List<float> electrons; // energies of electrons
@@ -32,7 +32,6 @@ public class Master : MonoBehaviour
     {
         currentText = currentTextObject.gameObject.GetComponent<TextMeshProUGUI>();
         voltageText = voltageTextObject.gameObject.GetComponent<TextMeshProUGUI>();
-        //charge = new ChargeNew();
         charge.setIntensity(intensity);
 
     }
